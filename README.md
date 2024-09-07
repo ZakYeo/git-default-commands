@@ -69,3 +69,65 @@ And the default branch will be merged into your current branch without needing t
 
 - This command assumes you have the `origin` remote properly configured and pointing to the correct repository.
 - It works by querying the remote’s default branch with `git remote show origin`. If no default branch is configured, or if the remote isn’t correctly set, the command may fail.
+
+---
+
+## Git Alias: Checkout Default Branch
+
+### Description
+
+Similar to `merge-default`, this alias (`checkout-default`) simplifies the process of checking out the default branch, regardless of whether it's `main`, `master`, or a custom name. It dynamically detects the default branch set in the repository's origin using the same method and checks it out with a single command.
+
+### Installation
+
+To install this alias, run the following command:
+
+```sh
+git config --global alias.checkout-default '!f() { \
+  default_branch=$(git remote show origin | grep "HEAD branch" | awk "{print \$NF}"); \
+  git checkout $default_branch; \
+}; f'
+```
+
+### Usage
+
+Once the alias is configured, you can use it by simply running:
+
+```sh
+git checkout-default
+```
+
+This command will:
+1. Automatically detect the default branch (typically `main` or `master`).
+2. Switch your working directory to the default branch.
+
+### Why This Helps
+
+1. **Fast switching**: It eliminates the need to remember the default branch name across different repositories, allowing you to quickly switch to the default branch regardless of its name.
+  
+2. **Consistency**: If you're working in multiple repositories with different branch names, this alias makes switching back to the default branch consistent.
+
+### Example
+
+Normally, to switch to the default branch, you would have to check the name and run either:
+
+```sh
+git checkout main
+```
+or
+
+```sh
+git checkout master
+```
+
+With `checkout-default`, you just need to run:
+
+```sh
+git checkout-default
+```
+
+This command will automatically check out the correct default branch based on the repository's configuration.
+
+### Notes
+
+- This command assumes you have the `origin` remote properly configured and pointing to the correct repository.
